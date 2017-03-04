@@ -10,10 +10,9 @@ from datetime import datetime
 from datetime import timedelta
 import sys
 
-maxLends = {'usd': Decimal(1000.00),
-            'btc': Decimal(1.0),
-            'ltc': Decimal(100.0)}
+maxLends = {'usd': Decimal(1000.00)}
 exchangeRate = Decimal(1)
+
 class LendingStrategy(object):
     '''
     This class is used as strategy for lending. Arguments can be used to tweak the strategy, as needed.
@@ -69,14 +68,15 @@ class LendingStrategy(object):
                     'btc': {5: 35, 14: 80, 30: 150},
                     'ltc': {5: 45, 14: 100, 30: 200}}
         period = 2
-        for r in rateTable[currency]:
-            if rate > rateTable[currency][r]:
-                period = max(period, r)
+        #for r in rateTable[currency]:
+            #if rate > rateTable[currency][r]: #This code is used to implement a bit of a curve. Disabled to force 2 day lends.
+            #    period = max(period, r)
         return period
     def checkUSDbalance(self, balance, currency):
         '''This function assumes minimum of $50 USD'''
         if currency is not 'usd':
             exchangeRate = Decimal(self.BFX.getOrderbook(currency + 'usd')['bids'][0]['price'])
+            print currency
             balance = balance * exchangeRate
         else:
             exchangeRate = 1

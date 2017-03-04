@@ -37,7 +37,7 @@ class Interface(object):
         '''Bitfinex requires very specific headers. This function is to help with obtaining the proper HTTP headers.'''
         jsonPayload = json.dumps(payload)
         payload = base64.b64encode(jsonPayload.encode(encoding='utf_8', errors='strict'))
-        signature = hmac.new(self.apiSecret, payload, 'sha384').hexdigest().lower()
+        signature = hmac.new(self.apiSecret, payload, hashlib.sha384).hexdigest().lower()
         return {'X-BFX-PAYLOAD': payload, 'X-BFX-SIGNATURE': signature, 'X-BFX-APIKEY': self.apiKey}
     def timestampNumberToText(self, timestamp):
         return datetime.datetime.fromtimestamp(float(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
